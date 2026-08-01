@@ -119,7 +119,7 @@ export default function About() {
 
     return (
         <section id="about" className="min-h-screen bg-[#0F172A] py-20">
-            <div className="container mx-auto px-4 max-w-6xl">
+            <div className="container max-w-6xl">
                 {/* Introduction Section (Matching Screenshot Layout) */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}

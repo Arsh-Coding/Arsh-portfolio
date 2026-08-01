@@ -6,7 +6,7 @@ export default function AboutPage() {
     return (
         <div className="bg-[#0F172A] min-h-screen text-white">
             <div className="w-full flex justify-center">
-                <div className="w-full max-w-[1200px]">
+                <div className="w-full max-w-[80%]">
                     <Navbar />
                     <About />
                     {/* <Footer /> */}

@@ -4,15 +4,6 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, Github, Linkedin, MapPin, Send, User, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 
-const fadeInUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.6, ease: 'easeOut' },
-    },
-};
-
 const contactInfo = [
     {
         icon: Mail,
@@ -63,6 +54,7 @@ export default function Contact() {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+    const [submitMessage, setSubmitMessage] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -115,11 +107,25 @@ export default function Contact() {
 
         setIsSubmitting(true);
         setSubmitStatus(null);
+        setSubmitMessage('');
 
-        // Simulate form submission (replace with actual API call)
-        setTimeout(() => {
-            setIsSubmitting(false);
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Unable to send your message right now.');
+            }
+
             setSubmitStatus('success');
+            setSubmitMessage(result.message || "Message sent successfully! I'll get back to you soon.");
             setFormData({
                 name: '',
                 email: '',
@@ -127,11 +133,15 @@ export default function Contact() {
                 message: '',
             });
 
-            // Clear success message after 5 seconds
             setTimeout(() => {
                 setSubmitStatus(null);
             }, 5000);
-        }, 1500);
+        } catch (error) {
+            setSubmitMessage(error instanceof Error ? error.message : 'Unable to send your message right now.');
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -359,7 +369,17 @@ export default function Contact() {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="bg-green-500/10 border border-green-500/50 text-green-400 px-4 py-3 rounded-lg text-center"
                                 >
-                                    ✓ Message sent successfully! I'll get back to you soon.
+                                    {submitMessage}
+                                </motion.div>
+                            )}
+
+                            {submitStatus === 'error' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-center"
+                                >
+                                    {submitMessage || 'Sorry, I could not send your message. Please try again in a moment.'}
                                 </motion.div>
                             )}
                         </form>
