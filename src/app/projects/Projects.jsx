@@ -36,7 +36,7 @@ const cardVariants = {
     },
 };
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, priority }) => {
     return (
         <motion.div
             variants={cardVariants}
@@ -47,6 +47,8 @@ const ProjectCard = ({ project }) => {
                     src={project.image}
                     alt={project.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority={priority}
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
@@ -118,8 +120,8 @@ export default function Projects() {
                     viewport={{ once: true, amount: 0.1 }}
                     transition={{ staggerChildren: 0.2 }}
                 >
-                    {projectsData.map((project) => (
-                        <ProjectCard key={project.id} project={project} />
+                    {projectsData.map((project, index) => (
+                        <ProjectCard key={project.id} project={project} priority={index === 0} />
                     ))}
                 </motion.div>
             </div>

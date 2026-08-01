@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { Download, Code, Database, Palette, Zap, Briefcase, GraduationCap, Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
 
 const skills = [
@@ -191,10 +192,13 @@ export default function About() {
                         {/* Right Column (Image) */}
                         <div className="flex justify-center md:justify-end">
                             <div className="relative w-[300px] h-[300px] md:w-[350px] md:h-[350px]">
-                                <img
+                                <Image
                                     src={'/assets/about-img.png'}
                                     alt="Developer illustration"
-                                    className="object-contain rounded-full w-full h-full"
+                                    fill
+                                    priority
+                                    sizes="(max-width: 768px) 300px, 350px"
+                                    className="object-contain rounded-full"
                                 />
                             </div>
                         </div>
